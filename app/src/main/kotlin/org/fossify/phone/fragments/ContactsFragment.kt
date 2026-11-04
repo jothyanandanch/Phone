@@ -30,6 +30,7 @@ import org.fossify.phone.extensions.handleGenericContactClick
 import org.fossify.phone.extensions.launchCreateNewContactIntent
 import org.fossify.phone.extensions.setupWithContacts
 import org.fossify.phone.extensions.startContactDetailsIntent
+import org.fossify.phone.helpers.SimContactsHelper
 import org.fossify.phone.interfaces.RefreshItemsListener
 
 class ContactsFragment(context: Context, attributeSet: AttributeSet) : MyViewPagerFragment<MyViewPagerFragment.LettersInnerBinding>(context, attributeSet),
@@ -94,6 +95,14 @@ class ContactsFragment(context: Context, attributeSet: AttributeSet) : MyViewPag
                 val privateContacts = MyContactsContentProvider.getContacts(context, privateCursor)
                 if (privateContacts.isNotEmpty()) {
                     allContacts.addAll(privateContacts)
+                    allContacts.sort()
+                }
+            }
+
+            if (context.hasPermission(PERMISSION_READ_CONTACTS)) {
+                val simContacts = SimContactsHelper.getContacts(context, allContacts)
+                if (simContacts.isNotEmpty()) {
+                    allContacts.addAll(simContacts)
                     allContacts.sort()
                 }
             }
